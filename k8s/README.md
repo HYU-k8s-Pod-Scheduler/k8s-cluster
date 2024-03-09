@@ -107,3 +107,12 @@ minikube addons disable ingress
 # Stop the cluster
 minikube stop
 ```
+
+## TODO
+
+해당 클러스터 완성을 위한 Action Item은 다음과 같습니다.
+
+- [ ] Minikube 클러스터를 VM 기반 클러스터로 Migration
+- [ ] Dummy Application 고도화: 복잡한 Topology 구성
+- [ ] 멀티 클러스터 구성
+- [ ] 클러스터 Fedaration 환경 구성 (Karmada 등 이용)

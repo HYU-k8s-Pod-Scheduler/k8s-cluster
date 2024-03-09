@@ -1,5 +1,10 @@
 # HYU Graduation Project Kubernetes Cluster Setup Guide
 
+![Architecture](./architecture.png)
+
+`/k8s` 경로 내의 파일들은 위 Architecture에서 밝은 부분의 영역을 포함합니다.  
+클러스터 설정의 최종 목표는 어두운 부분의 영역을 포함하여 멀티 클러스터 환경을 구성하는 것입니다.
+
 ## Prerequisites
 
 클러스터 설정을 시작하기 이전에, 다음과 같은 Tool 설치가 필요합니다.

@@ -115,3 +115,4 @@ minikube stop
 - [ ] Dummy Application 고도화: 복잡한 Topology 구성
 - [ ] 멀티 클러스터 구성
 - [ ] 클러스터 Fedaration 환경 구성 (Karmada 등 이용)
+- [ ] (도입 여부 판단 필요) HELM 차트 구성

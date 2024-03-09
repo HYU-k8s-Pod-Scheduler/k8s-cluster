@@ -5,3 +5,9 @@
 ## Content
 
 [`/k8s`](./k8s/): 테스트 환경으로 사용할 쿠버네티스 클러스터 설정 파일을 포함합니다.
+
+## Members
+
+<a href="https://github.com/HYU-k8s-Pod-Scheduler/k8s-cluster/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=HYU-k8s-Pod-Scheduler/k8s-cluster" alt="contributors"/>
+</a>

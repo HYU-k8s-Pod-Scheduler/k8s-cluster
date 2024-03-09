@@ -66,3 +66,39 @@ istioctl dashboard grafana
 #### Reference
 
 - [Istio - Grafana](https://istio.io/latest/docs/ops/integrations/grafana/#option-1-quick-start)
+
+### 5. Apply Resources
+
+Test에 사용할 Dummy Resource를 배포합니다.
+
+```bash
+kubectl -f deployment.yaml
+kubectl -f service.yaml
+kubectl -f ingress.yaml
+```
+
+## Clean Up
+
+환경을 정리하기 위해서 다음의 명령어를 사용할 수 있습니다.
+
+```bash
+# Remove resources
+kubectl -f ingress.yaml
+kubectl -f service.yaml
+kubectl -f deployment.yaml
+
+# Remove Grafana
+kubectl delete -f https://raw.githubusercontent.com/istio/istio/release-1.20/samples/addons/grafana.yaml
+
+# Remove Prometheus
+kubectl delete -f https://raw.githubusercontent.com/istio/istio/release-1.20/samples/addons/prometheus.yaml
+
+# Remove Istio
+istioctl uninstall --purge
+
+# Disable Nginx Ingress Controller
+minikube addons disable ingress
+
+# Stop the cluster
+minikube stop
+```

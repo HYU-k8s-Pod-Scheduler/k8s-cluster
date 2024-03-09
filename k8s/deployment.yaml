@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hyu-nginx-deployment
+  labels:
+    app: hyu-nginx-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hyu-nginx-deployment
+  template:
+    metadata:
+      labels:
+        app: hyu-nginx-deployment
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.14.2
+          ports:
+            - containerPort: 80

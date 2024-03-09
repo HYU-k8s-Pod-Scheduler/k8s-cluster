@@ -10,7 +10,6 @@
 클러스터 설정을 시작하기 이전에, 다음과 같은 Tool 설치가 필요합니다.
 
 - [kubectl v1.2.40+](https://kubernetes.io/docs/tasks/tools/)
-- [Helm v3.0+](https://helm.sh/docs/intro/install/)
 - [istioctl v1.17+](https://istio.io/latest/docs/setup/getting-started/#download)
 - [Minikube v1.30+](https://minikube.sigs.k8s.io/docs/start/)
 

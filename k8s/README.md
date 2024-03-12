@@ -76,9 +76,9 @@ istioctl dashboard grafana
 Test에 사용할 Dummy Resource를 배포합니다.
 
 ```bash
-kubectl -f deployment.yaml
-kubectl -f service.yaml
-kubectl -f ingress.yaml
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+kubectl apply -f ingress.yaml
 ```
 
 ## Clean Up
@@ -87,9 +87,9 @@ kubectl -f ingress.yaml
 
 ```bash
 # Remove resources
-kubectl -f ingress.yaml
-kubectl -f service.yaml
-kubectl -f deployment.yaml
+kubectl delete -f ingress.yaml
+kubectl delete -f service.yaml
+kubectl delete -f deployment.yaml
 
 # Remove Grafana
 kubectl delete -f https://raw.githubusercontent.com/istio/istio/release-1.20/samples/addons/grafana.yaml

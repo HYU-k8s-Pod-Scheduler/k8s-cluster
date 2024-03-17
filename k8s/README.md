@@ -11,22 +11,16 @@
 
 - [kubectl v1.2.40+](https://kubernetes.io/docs/tasks/tools/)
 - [istioctl v1.17+](https://istio.io/latest/docs/setup/getting-started/#download)
-- [Minikube v1.30+](https://minikube.sigs.k8s.io/docs/start/)
+- [calicoctl v3.26+](https://docs.tigera.io/calico/latest/operations/calicoctl/install)
 
 ## Setup Cluster
 
-### 1. Setup minikube on your machine
+### 1. Setup nginx-ingress-controller on your cluster
 
-다음과 같은 명령어를 실행하여 로컬 환경에 단일 클러스터를 구축합니다.
-
-```bash
-minikube start
-```
-
-이후에 배포되는 Application에 접속을 가능하게 하기 위해 `ingress` addon을 설치하여 `nginx ingress controller`를 활성화합니다.
+다음과 같은 명령어를 실행하여 클러스터에 `nginx-ingress-controller`를 설치합니다.
 
 ```bash
-minikube addons enable ingress
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.10.0/deploy/static/provider/cloud/deploy.yaml
 ```
 
 ### 2. Install Istio with `istioctl`
@@ -34,7 +28,8 @@ minikube addons enable ingress
 `istioctl`를 이용하여 Istio를 클러스터에 설치합니다.
 
 ```bash
-istioctl install
+istioctl install --set profile=minimal -y
+kubectl label namespace default istio-injection=enabled
 ```
 
 #### Reference

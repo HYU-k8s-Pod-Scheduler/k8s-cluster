@@ -26,3 +26,34 @@ vagrant up
 ```bash
 cp configs/config ~/.kube/
 ```
+
+### 3. Access to Kubernetes Dashboard
+
+Kubernetes Dashboard에 접근하여 클러스터가 정상적으로 설정되었는지 확인합니다.
+
+먼저, 아래 명령어를 이용하여 login token을 획득합니다.
+
+```bash
+kubectl -n kubernetes-dashboard get secret/admin-user -o go-template="{{.data.token | base64decode}}"
+```
+
+Proxy를 실행합니다.
+
+```bash
+kubectl port-forward service/kubernetes-dashboard -n kubernetes-dashboard 8080:443
+```
+
+브라우저에서 아래 사이트에 접속합니다.
+
+```text
+https://localhost:8080
+```
+
+## Clean Up
+
+환경을 정리하기 위해서 다음의 명령어를 사용할 수 있습니다.
+
+```bash
+# Remove VirtualBox cluster
+vagrant destory -f
+```

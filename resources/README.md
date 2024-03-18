@@ -2,34 +2,20 @@
 
 ![Architecture](./architecture.png)
 
-`/k8s` 경로 내의 파일들은 위 Architecture에서 밝은 부분의 영역을 포함합니다.  
-클러스터 설정의 최종 목표는 어두운 부분의 영역을 포함하여 멀티 클러스터 환경을 구성하는 것입니다.
+`/resources` 경로 내의 파일들은 위 Architecture에서 밝은 부분의 영역을 포함합니다.
 
 ## Prerequisites
 
-클러스터 설정을 시작하기 이전에, 다음과 같은 Tool 설치가 필요합니다.
+클러스터 내에 리소스 설정을 시작하기 이전에, 다음과 같은 Tool 설치가 필요합니다.
 
-- [kubectl v1.2.40+](https://kubernetes.io/docs/tasks/tools/)
+- [kubectl v1.19+](https://kubernetes.io/docs/tasks/tools/)
 - [istioctl v1.17+](https://istio.io/latest/docs/setup/getting-started/#download)
-- [Minikube v1.30+](https://minikube.sigs.k8s.io/docs/start/)
+
+본 문서에서는 `/cluster` 내의 클러스터를 이미 구성했다고 전제하고 설명합니다.
 
 ## Setup Cluster
 
-### 1. Setup minikube on your machine
-
-다음과 같은 명령어를 실행하여 로컬 환경에 단일 클러스터를 구축합니다.
-
-```bash
-minikube start
-```
-
-이후에 배포되는 Application에 접속을 가능하게 하기 위해 `ingress` addon을 설치하여 `nginx ingress controller`를 활성화합니다.
-
-```bash
-minikube addons enable ingress
-```
-
-### 2. Install Istio with `istioctl`
+### 1. Install Istio with `istioctl`
 
 `istioctl`를 이용하여 Istio를 클러스터에 설치합니다.
 
@@ -41,7 +27,7 @@ istioctl install
 
 - [Install with `istioctl`](https://istio.io/latest/docs/setup/install/istioctl/)
 
-### 3. Install Prometheus
+### 2. Install Prometheus
 
 Istio에서 제공하는 Prometheus 설치 YAML 파일을 이용하여 Prometheus를 설치합니다.
 
@@ -53,7 +39,7 @@ kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.20/samp
 
 - [Istio - Prometheus](https://istio.io/latest/docs/ops/integrations/prometheus/#option-1-quick-start)
 
-### 4. Install Grafana
+### 3. Install Grafana
 
 Istio에서 제공하는 Grafana 설치 YAML 파일을 이용하여 Grafana를 설치합니다.
 
@@ -71,7 +57,7 @@ istioctl dashboard grafana
 
 - [Istio - Grafana](https://istio.io/latest/docs/ops/integrations/grafana/#option-1-quick-start)
 
-### 5. Apply Resources
+### 4. Apply Resources
 
 Test에 사용할 Dummy Resource를 배포합니다.
 

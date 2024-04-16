@@ -20,7 +20,7 @@
 kind create cluster --config ./kind-config.yaml
 ```
 
-`kind-cinfig.yaml` 파일은 다음과 같은 설정을 포함합니다.
+`kind-config.yaml` 파일은 다음과 같은 설정을 포함합니다.
 
 1. local host가 Ingress Controller에 특정 포트로 접근할 수 있도록 `extraPortMpaaings`를 이용하여 포트 개방
 2. `node-labels`를 이용하여 `ingress-ready=true`인 노드에게만 트래픽이 전달될 수 있게 함

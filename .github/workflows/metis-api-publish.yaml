@@ -5,6 +5,7 @@ on:
       - main
     paths:
       - 'metis-api/**'
+      - .github/workflows/metis-api-publish.yaml
 jobs:
   build:
     name: build
@@ -20,9 +21,9 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Use docker buildx
-        run: docker buildx create --use ./metis-api
+        run: docker buildx create --use
 
       - name: Build & Push Image
         env:
           VERSION: ${{ inputs.version }}
-        run: docker buildx build --platform linux/amd64,linux/arm64 -t jongbeomlee/metis-api:latest --push .
+        run: docker buildx build --platform linux/amd64,linux/arm64 -t jongbeomlee/metis-api:latest --push ./metis-api

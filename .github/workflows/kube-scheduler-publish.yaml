@@ -20,7 +20,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Use docker buildx
-        run: docker buildx create --use
+        run: docker buildx create --use ./metis-api
 
       - name: Build & Push Image
         env:

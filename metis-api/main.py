@@ -37,6 +37,11 @@ class SchedulingRequest(BaseModel):
     pod_name: str = Field(description="파드명", example="pod-1")
 
 
+def remove_random_string_from(pod_name: str):
+    # ex) pod-1-abcde -> pod-1
+    return "-".join(pod_name.split("-")[:-1])
+
+
 # 그래프 파티셔닝 API 엔드포인트
 @app.post("/partition")
 async def partition_graph(data: PartitionRequest):
@@ -65,10 +70,12 @@ async def partition_graph(data: PartitionRequest):
         scheduling_info = {}
 
         for pod in data.pod_list:
-            scheduling_info[pod] = deque()
+            scheduling_info[remove_random_string_from(pod)] = deque()
 
         for i, part in enumerate(parts):
-            scheduling_info[data.pod_list[i]].append(data.node_list[part])
+            scheduling_info[remove_random_string_from(data.pod_list[i])].append(
+                data.node_list[part]
+            )
 
         # 결과 반환
         return {
@@ -84,15 +91,17 @@ async def partition_graph(data: PartitionRequest):
 async def get_scheduling_info(data: SchedulingRequest):
     global scheduling_info
 
-    if data.pod_name not in scheduling_info:
+    pod_name = remove_random_string_from(data.pod_name)
+
+    if pod_name not in scheduling_info:
         print("Pod not found")
         raise HTTPException(status_code=500, detail="Pod not found")
 
-    if len(scheduling_info[data.pod_name]) == 0:
+    if len(scheduling_info[pod_name]) == 0:
         print("Node not found")
         raise HTTPException(status_code=500, detail="Node not found")
 
-    return scheduling_info[data.pod_name].popleft()
+    return scheduling_info[pod_name].popleft()
 
 
 # 테스트 실행

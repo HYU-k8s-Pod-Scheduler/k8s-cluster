@@ -19,6 +19,10 @@ class PartitionRequest(BaseModel):
         description="파드명 리스트",
         example=["pod-1", "pod-2", "pod-3", "pod-4", "pod-5"],
     )
+    vweights: List[int] = Field(
+        description="파드 가중치 리스트 / 파드명 순서와 동일함",
+        example=[512, 128, 128, 128, 128],
+    )
     adjacency_list: List[List[int]] = Field(
         description="인접 리스트 / 파드명 순서와 동일함",
         example=[[1, 2], [0, 2, 3], [0, 1, 3], [1, 2, 4], [3]],
@@ -51,7 +55,11 @@ async def partition_graph(data: PartitionRequest):
 
         # PyMetis로 그래프 분할 수행
         cuts, parts = pymetis.part_graph(
-            num_parts, xadj=xadj, adjncy=adjncy, eweights=eweights
+            num_parts,
+            xadj=xadj,
+            adjncy=adjncy,
+            eweights=eweights,
+            vweights=data.vweights,
         )
 
         scheduling_info = {}

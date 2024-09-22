@@ -5,6 +5,34 @@ metadata:
   namespace: kube-system
 ---
 apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: custom-scheduler-pod-management-role
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list", "watch", "update", "create", "delete"]
+  - apiGroups: [""]
+    resources: ["nodes"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["events.k8s.io"]
+    resources: ["events"]
+    verbs: ["create", "patch", "update"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: my-scheduler-pod-management
+subjects:
+  - kind: ServiceAccount
+    name: my-scheduler
+    namespace: kube-system
+roleRef:
+  kind: ClusterRole
+  name: custom-scheduler-pod-management-role
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: my-scheduler-as-kube-scheduler
@@ -28,6 +56,31 @@ subjects:
 roleRef:
   kind: ClusterRole
   name: system:volume-scheduler
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: kube-system
+  name: extension-apiserver-authentication-reader
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    resourceNames: ["extension-apiserver-authentication"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: my-scheduler-auth-reader
+  namespace: kube-system
+subjects:
+  - kind: ServiceAccount
+    name: my-scheduler
+    namespace: kube-system
+roleRef:
+  kind: Role
+  name: extension-apiserver-authentication-reader
   apiGroup: rbac.authorization.k8s.io
 ---
 apiVersion: v1
@@ -70,6 +123,7 @@ spec:
         - command:
             - /usr/local/bin/kube-scheduler
             - --config=/etc/kubernetes/my-scheduler/my-scheduler-config.yaml
+            - --v=2
           image: jongbeomlee/kube-scheduler:latest
           imagePullPolicy: Always
           livenessProbe:
@@ -78,6 +132,8 @@ spec:
               port: 10259
               scheme: HTTPS
             initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 15
           name: kube-second-scheduler
           readinessProbe:
             httpGet:
@@ -98,51 +154,17 @@ spec:
         - name: config-volume
           configMap:
             name: my-scheduler-config
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  labels:
-    tier: control-plane
-    app: metis-api
-  name: metis-api
-  namespace: kube-system
-spec:
-  selector:
-    matchLabels:
-      tier: control-plane
-      app: metis-api
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        tier: control-plane
-        app: metis-api
-    spec:
-      serviceAccountName: my-scheduler
-      containers:
-        - name: metis-api
-          image: jongbeomlee/metis-api:latest
-          imagePullPolicy: Always
-          resources:
-            requests:
-              cpu: "0.1"
-          securityContext:
-            privileged: false
-      hostNetwork: false
-      hostPID: false
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: metis-api-service
-  namespace: kube-system
-spec:
-  type: NodePort
-  selector:
-    app: metis-api
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
-  externalTrafficPolicy: Cluster
+      # scheduling to control-plane node
+      tolerations:
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: "Exists"
+          effect: "NoSchedule"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: "kubernetes.io/hostname"
+                    operator: In
+                    values:
+                      - kind-control-plane # control-plane node name

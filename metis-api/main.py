@@ -76,6 +76,7 @@ async def partition_graph(data: PartitionRequest):
             "parts": parts,  # 각 노드의 파티션 할당 결과
         }
     except Exception as e:
+        print(e)
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -84,9 +85,11 @@ async def get_scheduling_info(data: SchedulingRequest):
     global scheduling_info
 
     if data.pod_name not in scheduling_info:
+        print("Pod not found")
         raise HTTPException(status_code=500, detail="Pod not found")
 
     if len(scheduling_info[data.pod_name]) == 0:
+        print("Node not found")
         raise HTTPException(status_code=500, detail="Node not found")
 
     return scheduling_info[data.pod_name].popleft()
@@ -96,4 +99,4 @@ async def get_scheduling_info(data: SchedulingRequest):
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=80)

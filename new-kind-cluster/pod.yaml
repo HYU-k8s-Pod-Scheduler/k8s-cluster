@@ -32,7 +32,7 @@ kind: Deployment
 metadata:
   name: pod-b-deployment
 spec:
-  replicas: 10
+  replicas: 5
   selector:
     matchLabels:
       app: pod-b

@@ -1,65 +1,143 @@
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: annotation-second-scheduler
-  labels:
-    name: multischeduler-example
+  name: pod-a-deployment
 spec:
-  schedulerName: my-scheduler
-  containers:
-    - name: nginx
-      image: nginx
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pod-a
+  template:
+    metadata:
+      labels:
+        app: pod-a
+    spec:
+      schedulerName: my-scheduler
+      containers:
+        - name: nginx
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "512m"
+            limits:
+              memory: "128Mi"
+              cpu: "512m"
+
 ---
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: annotation-second-scheduler-2
-  labels:
-    name: multischeduler-example
+  name: pod-b-deployment
 spec:
-  schedulerName: my-scheduler
-  containers:
-    - name: nginx
-      image: nginx
+  replicas: 10
+  selector:
+    matchLabels:
+      app: pod-b
+  template:
+    metadata:
+      labels:
+        app: pod-b
+    spec:
+      schedulerName: my-scheduler
+      containers:
+        - name: nginx
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "512m"
+            limits:
+              memory: "128Mi"
+              cpu: "512m"
+
 ---
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: annotation-second-scheduler-3
-  labels:
-    name: multischeduler-example
+  name: pod-c-deployment
 spec:
-  schedulerName: my-scheduler
-  containers:
-    - name: nginx
-      image: nginx
-# ---
-# apiVersion: apps/v1
-# kind: StatefulSet
-# metadata:
-#   name: nginx-statefulset
-# spec:
-#   serviceName: "nginx"
-#   replicas: 3
-#   selector:
-#     matchLabels:
-#       app: nginx
-#   template:
-#     metadata:
-#       labels:
-#         app: nginx
-#     spec:
-#       schedulerName: my-scheduler
-#       containers:
-#         - name: nginx
-#           image: nginx:latest
-#           ports:
-#             - containerPort: 80
-#   volumeClaimTemplates:
-#     - metadata:
-#         name: nginx-persistent-storage
-#       spec:
-#         accessModes: ["ReadWriteOnce"]
-#         resources:
-#           requests:
-#             storage: 500Mi
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pod-c
+  template:
+    metadata:
+      labels:
+        app: pod-c
+    spec:
+      schedulerName: my-scheduler
+      containers:
+        - name: nginx
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "512m"
+            limits:
+              memory: "256Mi"
+              cpu: "512m"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pod-d-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pod-d
+  template:
+    metadata:
+      labels:
+        app: pod-d
+    spec:
+      schedulerName: my-scheduler
+      containers:
+        - name: nginx
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "512m"
+            limits:
+              memory: "256Mi"
+              cpu: "512m"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pod-e-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pod-e
+  template:
+    metadata:
+      labels:
+        app: pod-e
+    spec:
+      schedulerName: my-scheduler
+      containers:
+        - name: nginx
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "512m"
+            limits:
+              memory: "128Mi"
+              cpu: "512m"

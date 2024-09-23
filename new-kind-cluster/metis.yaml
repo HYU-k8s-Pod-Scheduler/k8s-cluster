@@ -14,35 +14,35 @@ spec:
         app: metis
     spec:
       containers:
-      - name: metis-container
-        image: jongbeomlee/metis-api:latest # Replace with your actual image name
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 80
+        - name: metis-container
+          image: jongbeomlee/metis-api:latest # Replace with your actual image name
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
       tolerations:
-      - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: "NoSchedule"
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: "Exists"
+          effect: "NoSchedule"
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
-            - matchExpressions:
-              - key: "kubernetes.io/hostname"
-                operator: In
-                values:
-                - kind-control-plane # control-plane node name
+              - matchExpressions:
+                  - key: "kubernetes.io/hostname"
+                    operator: In
+                    values:
+                      - kind-control-plane # control-plane node name
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: metis-service
+  name: metis-api-service
   namespace: kube-system
 spec:
   selector:
     app: metis
-  clusterIP: None  # Headless Service로 설정
+  clusterIP: None # Headless Service로 설정
   ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 80
+    - protocol: TCP
+      port: 80
+      targetPort: 80

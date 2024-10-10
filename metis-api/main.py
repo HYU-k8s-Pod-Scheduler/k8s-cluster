@@ -39,7 +39,7 @@ class SchedulingRequest(BaseModel):
 
 def remove_random_string_from(pod_name: str):
     # ex) pod-1-abcde -> pod-1
-    return "-".join(pod_name.split("-")[:-1])
+    return "-".join(pod_name.split("-")[:-2])
 
 
 # 그래프 파티셔닝 API 엔드포인트
@@ -92,6 +92,9 @@ async def get_scheduling_info(data: SchedulingRequest):
     global scheduling_info
 
     pod_name = remove_random_string_from(data.pod_name)
+
+    if pod_name.startswith("loadgenerator"):
+        return "kind-worker6"
 
     if pod_name not in scheduling_info:
         print("Pod not found")
